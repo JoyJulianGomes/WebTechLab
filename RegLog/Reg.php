@@ -7,8 +7,8 @@
         <style>
             .inputBox{
                 width : 30%;
-                /*margin: 0% 40% 0% 40%;*//*this one also works*/
-                margin: 15% auto;
+                margin: 15% 40% 0% 40%;/*this one also works*/
+                /*margin: 15% auto;*/
                 /*border: 1px solid red;*/
             }
             .inputBox form table tr td{
