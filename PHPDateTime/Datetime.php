@@ -5,33 +5,33 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Sign up</title>
         <style>
-			.Head{
-				margin: 1% auto;
-                width : 20%;
-				background-color: #83db93;
-				border: 1px solid yellow;
-            
-			}
-			.cont{
-				margin: 1% auto;
-				border: 1px solid red;
-			}
-			.OutputBox{
-				float:left;
-                width : 20%;
-				height: 400px;
-                margin: 10% 1% 1% 10%;
-				border: 1px solid yellow;
-            }
-			#_1{
-				background-color: #83dbca;
-			}
-			#_2{
-				background-color: #43c6ad;
-			}
-			#_3{
-				background-color: #28bfa2;
-			}
+		.Head{
+			margin: 1% auto;
+			width : 20%;
+			background-color: #83db93;
+			border: 1px solid yellow;
+
+		}
+		.cont{
+			margin: 1% auto;
+			border: 1px solid red;
+		}
+		.OutputBox{
+			float:left;
+			width : 20%;
+			height: 400px;
+		margin: 10% 1% 1% 10%;
+			border: 1px solid yellow;
+		}
+		#_1{
+			background-color: #83dbca;
+		}
+		#_2{
+			background-color: #43c6ad;
+		}
+		#_3{
+			background-color: #28bfa2;
+		}
         </style>
     </head>
     <body>
@@ -73,8 +73,6 @@
 				?>
 			</div>
 		</div>
-		
-        
 	</center>
     </body>
 </html>
