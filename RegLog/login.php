@@ -1,3 +1,4 @@
+<?php session_start();?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -83,7 +84,12 @@
                 $pass = "pass:".$pass;
                 if($passFromFile != null)
                 {
-                    if($passFromFile == $pass){echo "success";}
+                    if($passFromFile == $pass){
+						echo "success";
+						$_SESSION['Username']=$name;
+						header("Location:startpage.php");
+						exit;
+					}
                     else{$passErr = "Wrong Password";}
                 }
                 else{$nameErr = "username not found";}
