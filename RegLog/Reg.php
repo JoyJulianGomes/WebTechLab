@@ -24,11 +24,6 @@
     </head>
     <body>
         <?php 
-            echo "Current Directory:". $_SERVER["PHP_SELF"]."<br>"; 
-            
-            $name = $email = $pass = $confPass = $str= "";//initializing vars
-            $nameErr = $emailErr = $passErr = $confPassErr = "";
-            $fillFlag = false;
             
             function inputFiltering($data)
             {
@@ -141,12 +136,18 @@
             }
             
 //--------------------------------------void main(){-------------------------------------//
+            echo "Current Directory:". $_SERVER["PHP_SELF"]."<br>"; 
+            
+            $name = $email = $pass = $confPass = $str= "";//initializing vars
+            $nameErr = $emailErr = $passErr = $confPassErr = "";
+            $fillFlag = false;
             
             //echo "<h1>inside main()</h1><br>";
             if($_SERVER['REQUEST_METHOD']=='POST')
             {//CAUTION::POST must be Capitalized and use /'/ single quation
                 
                 //if any field is empty show an error
+                /*This if else block is no longer needed because of using "required" attribute in form
                 if(empty($_POST['name']))
                 {
                     $nameErr = "Field Required!!";
@@ -191,7 +192,14 @@
                     //echo $str."<br>";
                     writeCredential($str, $name, $pass, $confPass);
                 }
-                
+                */
+                $name = inputFiltering($_POST['name']);
+                $email = inputFiltering($_POST['email']);
+                $pass = trim($_POST['pass']);
+                $confPass = trim($_POST['confPass']);
+                $str = "name:".$name.",email:".$email.",pass:".$pass.";\n";
+                //echo $str."<br>";
+                writeCredential($str, $name, $pass, $confPass);
                 /*
                 echo $name."<br>";
                 echo $email."<br>";
@@ -207,13 +215,13 @@
         <div class="inputBox">
             <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
                 <table>
-                    <tr><td>Name:            </td><td> <input type="text"     name="name"> </td></tr>
+                    <tr><td>Name:            </td><td> <input type="text"     name="name" required> </td></tr>
                     <tr><td colspan=2><div class="error"> <?php echo $nameErr;?></div></td></tr>
-                    <tr><td>Email:           </td><td> <input type="text"     name="email"></td></tr>
+                    <tr><td>Email:           </td><td> <input type="text"     name="email" required></td></tr>
                     <tr><td colspan=2><div class="error"> <?php echo $emailErr;?></div></td></tr>
-                    <tr><td>Password:        </td><td> <input type="password" name="pass"> </td></tr>
+                    <tr><td>Password:        </td><td> <input type="password" name="pass" required> </td></tr>
                     <tr><td colspan=2><div class="error"> <?php echo $passErr;?></div></td></tr>
-                    <tr><td>Confirm Password:</td><td> <input type="password" name="confPass"></td></tr>
+                    <tr><td>Confirm Password:</td><td> <input type="password" name="confPass" required></td></tr>
                     <tr><td colspan=2><div class="error"> <?php echo $confPassErr;?></div></td></tr>
                     <tr><td colspan=2><input id = "submit" type="submit"value="Sign up"></td></tr>
                 </table>
