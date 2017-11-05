@@ -1,3 +1,6 @@
+<?php
+    session_start();
+?>
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -69,6 +72,8 @@
 						{
                             //echo "writting successfull<br>";
                             fclose($file);
+                            $_SESSION["Username"] = $name;
+                            header("Location: login.php");
                             return true;
                         }
                         else

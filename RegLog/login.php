@@ -1,4 +1,12 @@
-<?php session_start();?>
+<?php 
+    session_start();
+    if(isset($_SESSION['Username'])){
+
+    }
+    else{
+        $_SESSION['Username'] = "notset";
+    }
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -26,7 +34,8 @@
     <?php
         echo "Current Directory:". $_SERVER["PHP_SELF"]."<br>"; 
         
-        $name = $pass = "";//initializing vars
+        $name = isset($_COOKIE['user'])?$_COOKIE['user']:"";
+        $pass = "";//initializing vars
         $nameErr = $passErr = "";
         $fillFlag = false;
 
@@ -86,7 +95,8 @@
                 {
                     if($passFromFile == $pass){
 						echo "success";
-						$_SESSION['Username']=$name;
+                        $_SESSION['Username']=$name;
+                        setcookie("user", $name, time()+3600);
 						header("Location:startpage.php");
 						exit;
 					}
@@ -100,7 +110,7 @@
     <div class="inputBox">
         <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
             <table>
-                <tr><td>Username:</td><td> <input type="text"     name="name"></td></tr>
+                <tr><td>Username:</td><td> <input type="text"     name="name" value=<?php echo $_SESSION["Username"];?>></td></tr>
                 <tr><td colspan=2><div class="error"> <?php echo $nameErr;?></div></td></tr>
                 <tr><td>Password:</td><td> <input type="password" name="pass"></td></tr>
                 <tr><td colspan=2><div class="error"> <?php echo $passErr;?></div></td></tr>
