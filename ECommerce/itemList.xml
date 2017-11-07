@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE ItemList [
+    <!ELEMENT ItemList (Item)*>
+        <!ELEMENT Item (Name, Price, Id)>
+            <!ELEMENT Name (#PCDATA)>
+            <!ELEMENT Price (#PCDATA)>
+            <!ELEMENT Id (#PCDATA)>
+]>
+<ItemList>
+    <Item>
+        <Name>Samsung Galaxy S8 Edge</Name>
+        <Price>62000</Price>
+        <Id>4</Id>
+    </Item>
+    <Item>
+        <Name>Samsung Galaxy S8</Name>
+        <Price>58000</Price>
+        <Id>12</Id>
+    </Item>
+    <Item>
+        <Name>Apple IPhone X</Name>
+        <Price>70000</Price>
+        <Id>7</Id>
+    </Item>
+    <Item>
+        <Name>One Plus 1</Name>
+        <Price>24000</Price>
+        <Id>41</Id>
+    </Item>
+    <Item>
+        <Name>One Plus 3</Name>
+        <Price>32000</Price>
+        <Id>122</Id>
+    </Item>
+    <Item>
+        <Name>One Plus 3T</Name>
+        <Price>38000</Price>
+        <Id>73</Id>
+    </Item>
+</ItemList>
