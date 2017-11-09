@@ -5,36 +5,37 @@
             <!ELEMENT Name (#PCDATA)>
             <!ELEMENT Price (#PCDATA)>
             <!ELEMENT Id (#PCDATA)>
+        <!ATTLIST Item itemId ID #REQUIRED>
 ]>
 <ItemList>
-    <Item>
+    <Item ID="I1" color="Scarlet">
         <Name>Samsung Galaxy S8 Edge</Name>
         <Price>62000</Price>
-        <Id>4</Id>
+        <Id>I4</Id>
     </Item>
-    <Item>
+    <Item ID="I2">
         <Name>Samsung Galaxy S8</Name>
         <Price>58000</Price>
-        <Id>12</Id>
+        <Id>I12</Id>
     </Item>
-    <Item>
+    <Item ID="I3">
         <Name>Apple IPhone X</Name>
         <Price>70000</Price>
-        <Id>7</Id>
+        <Id>I7</Id>
     </Item>
-    <Item>
+    <Item ID="I4">
         <Name>One Plus 1</Name>
         <Price>24000</Price>
-        <Id>41</Id>
+        <Id>I41</Id>
     </Item>
-    <Item>
+    <Item ID="I5">
         <Name>One Plus 3</Name>
         <Price>32000</Price>
-        <Id>122</Id>
+        <Id>I122</Id>
     </Item>
-    <Item>
+    <Item ID="I6">
         <Name>One Plus 3T</Name>
         <Price>38000</Price>
-        <Id>73</Id>
+        <Id>I73</Id>
     </Item>
 </ItemList>
