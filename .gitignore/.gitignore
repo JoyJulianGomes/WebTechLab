@@ -1,3 +1,7 @@
+#VS Code
+#workspace file
+.code-workspace
+
 #Windows file system
 # Windows thumbnail cache files
 Thumbs.db
