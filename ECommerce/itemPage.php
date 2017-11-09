@@ -1,4 +1,7 @@
-<?php session_start(); ?>
+<?php 
+  session_start();
+  if(!isset($_SESSION['cartItemsAndQuantity'])) $_SESSION['cartItemsAndQuantity'] = array();
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -22,6 +25,7 @@
 		.CartContainer{
 			width:30%;
 			border: 1px solid green;
+			padding: 5px;
 		}
 		/*flex-item for ItemContainer*/
 		.Item{
@@ -29,6 +33,7 @@
 			height: 150px;
 			border: 1px #5555ff solid;
 			margin:15px;
+			padding: 5px;
 			/*background-image: linear-gradient(to bottom, #bbaaaa, #995005);*/
 			/*background-image: linear-Gradient(angle , colorStop1, colorStop2, ..);*/
 			/*background-image: radial-Gradient(#333333 10%, #999999 20%, white 50%);*/
@@ -76,28 +81,44 @@
 			<?php
 				if($_SERVER['REQUEST_METHOD']=='POST')
 				{
-					//if(isset($_POST['selected']))print_r($_POST['selected']);
-					//if(isset($_POST['quantity']))print_r($_POST['quantity']);
-					//if(isset($_POST['name']))print_r($_POST['name']);
-					//if(isset($_POST['price']))print_r($_POST['price']);
-					//echo $_POST['quantity["I4"]'];
 					if(isset($_POST['selected']) && isset($_POST['quantity']))
 					{	
-						echo "<table><tr><th>ID</th><th>Name</th><th>Quantity</th><th>Unit Price</th><th>Total Price</th><tr>";
+						print_r($_SESSION['cartItemsAndQuantity']);
 						foreach($_POST['selected'] as $itemsSelected)
 						{
 							//select item node from xml
-							$result = $xmlItemlList->xpath("/ItemList/Item[@ID='".$itemsSelected."']");
-							$itemDetails = $result[0];
-							echo "<tr>
-									<td>".$itemsSelected."</td>
-									<td>".$itemDetails->Name."</td>
-									<td>".$_POST['quantity'][$itemsSelected]."</td>
-									<td>".$itemDetails->Price."</td>
-									<td>".$itemDetails->Price*$_POST['quantity'][$itemsSelected]."</td>
-								  </tr>";
-							//echo "ID:".$itemsSelected." Name: ".$_POST['name'][$itemsSelected]." Selected ".$_POST['quantity'][$itemsSelected]."Times Price: ".$_POST['price'][$itemsSelected]."<br>";
+							if(!isset(($_SESSION['cartItemsAndQuantity'][$itemsSelected])))
+							{
+								$_SESSION['cartItemsAndQuantity'] += [$itemsSelected=>$_POST['quantity'][$itemsSelected]];
+							}
+							else
+							{
+								$_SESSION['cartItemsAndQuantity'][$itemsSelected] += $_POST['quantity'][$itemsSelected];
+							}
 						}
+						$total = 0;
+						echo "<table><tr><th>ID</th><th>Name</th><th>Quantity</th><th>Unit Price</th><th>Total Price</th><tr>";
+						foreach($_SESSION['cartItemsAndQuantity'] as $IDS=>$Quant)
+						{
+							$result = $xmlItemlList->xpath("/ItemList/Item[@ID='".$IDS."']");
+							$itemDetails = $result[0];
+							$total += $itemDetails->Price*$Quant;
+							echo "<tr>
+									<td>".$IDS."</td>
+									<td>".$itemDetails->Name."</td>
+									<td>".$Quant."</td>
+									<td>".$itemDetails->Price."</td>
+									<td>".$itemDetails->Price*$Quant."</td>
+								  </tr>";
+							//echo "ID:".$itemsSelected." Name: ".$_POST['name'][$itemsSelected]." Selected ".$_POST['quantity'][$itemsSelected]."Times Price: ".$_POST['price'][$itemsSelected]."<br>";	
+						}
+						echo "<tr>
+								<td>Total</td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td>".$total."</td>
+							</tr>";
 						echo "</table>";
 					}
 					
