@@ -49,21 +49,22 @@
 
 	<?php 
 		echo "Hello ".$_SESSION['username'];
-		$xml = simplexml_load_file("itemList.xml") or die("Error: Cannot create object");
-		//print_r($xml);
+		$xmlItemlList = simplexml_load_file("itemList.xml") or die("Error: Cannot create item object");
+		//print_r($xmlItemlList);
 	?>
 	<div class="SuperContainer">
 		<form method='POST' action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">				
 			<div class="ItemContainer">
 				<?php 
-					foreach($xml as $it)
+					foreach($xmlItemlList as $it)
 					{
 						echo '<div class="Item">';
 							echo "Name: "; echo $it->Name; echo "<br>";
 							echo "Price: "; echo $it->Price; echo "<br>";
-							echo 'ID-'.$it->Id.'<br>';
-							echo '<input type ="checkbox" name="selected[]">';
-							echo '<input type="number" name="quantity[]" min="1" max="25">';
+							$itemID = $it->attributes()->ID;
+							echo 'ID-'.$itemID.'<br>';
+							echo '<input type ="checkbox" name="selected[]" value="'.$itemID.'">';
+							echo '<input type="number" name="quantity['.$itemID.']" min="1" max="25" value="1">';
 						echo '</div>';
 					}
 				?>
@@ -72,14 +73,39 @@
 		</form>
 		
 		<div class="CartContainer">
+			<?php
+				if($_SERVER['REQUEST_METHOD']=='POST')
+				{
+					//if(isset($_POST['selected']))print_r($_POST['selected']);
+					//if(isset($_POST['quantity']))print_r($_POST['quantity']);
+					//if(isset($_POST['name']))print_r($_POST['name']);
+					//if(isset($_POST['price']))print_r($_POST['price']);
+					//echo $_POST['quantity["I4"]'];
+					if(isset($_POST['selected']) && isset($_POST['quantity']))
+					{	
+						echo "<table><tr><th>ID</th><th>Name</th><th>Quantity</th><th>Unit Price</th><th>Total Price</th><tr>";
+						foreach($_POST['selected'] as $itemsSelected)
+						{
+							//select item node from xml
+							$result = $xmlItemlList->xpath("/ItemList/Item[@ID='".$itemsSelected."']");
+							$itemDetails = $result[0];
+							echo "<tr>
+									<td>".$itemsSelected."</td>
+									<td>".$itemDetails->Name."</td>
+									<td>".$_POST['quantity'][$itemsSelected]."</td>
+									<td>".$itemDetails->Price."</td>
+									<td>".$itemDetails->Price*$_POST['quantity'][$itemsSelected]."</td>
+								  </tr>";
+							//echo "ID:".$itemsSelected." Name: ".$_POST['name'][$itemsSelected]." Selected ".$_POST['quantity'][$itemsSelected]."Times Price: ".$_POST['price'][$itemsSelected]."<br>";
+						}
+						echo "</table>";
+					}
+					
+				}
+			?>
 		</div>
 	</div>
-	<?php
-		if($_SERVER['REQUEST_METHOD']=='POST')
-        {
-
-		}
-	?>
+	
 	<a href="logout.php">logout</a>
 </body>
 
