@@ -8,6 +8,9 @@
     <meta charset="UTF-8">
 	<title>Items</title>
 	<style>
+		body{
+			padding:10px;
+		}
 		/*flex-container*/
 		.SuperContainer{
 			width:100%;
@@ -23,17 +26,18 @@
 		}
 		/*flex-item*/
 		.CartContainer{
-			width:30%;
+			width:35%;
 			border: 1px solid green;
 			padding: 5px;
 		}
 		/*flex-item for ItemContainer*/
 		.Item{
-			width:22%;
+			width:25%;
 			height: 150px;
 			border: 1px #5555ff solid;
 			margin:15px;
 			padding: 5px;
+			text-align:center;
 			/*background-image: linear-gradient(to bottom, #bbaaaa, #995005);*/
 			/*background-image: linear-Gradient(angle , colorStop1, colorStop2, ..);*/
 			/*background-image: radial-Gradient(#333333 10%, #999999 20%, white 50%);*/
@@ -58,9 +62,9 @@
     
 </head>
 <body>
-
-	<?php 
-		echo "Hello ".$_SESSION['username'];
+	<?php
+		//Welcome Part 
+		echo "<h3>Hello ".$_SESSION['username']."</h3><br>";
 		$xmlItemlList = simplexml_load_file("itemList.xml") or die("Error: Cannot create item object");
 		//print_r($xmlItemlList);
 	?>
@@ -191,7 +195,7 @@
 		</div>
 	</div>
 	
-	<a href="logout.php">logout</a>
+	<h3><a href="logout.php">logout</a></h3>
 </body>
 
 </html>

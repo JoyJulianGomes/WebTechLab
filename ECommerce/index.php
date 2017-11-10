@@ -7,7 +7,7 @@
     else{
         $name = $_SESSION['username'] = "not set";
     }
-    echo "<h1>Username: ".$name."</h1><br>";
+    //echo "<h1>Username: ".$name."</h1><br>";
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -104,6 +104,13 @@
                 <tr><td colspan=2><a href="Reg.php">Create An Account</a></td></tr>
             </table>
         </form>
+    </div>
+    <div class="inputBox">
+        <table>
+            <tr><td>Username:</td><td>Password</td></tr>
+            <tr><td>joybangla</td><td>jbd</td></tr>
+            <tr><td>dan</td><td>langdon</td></tr>
+        </table>
     </div>
     
 </body>
