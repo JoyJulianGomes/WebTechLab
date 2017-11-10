@@ -83,29 +83,14 @@
 		
 		<div class="CartContainer">
 			<?php
+				print_r($_SESSION['cartItemsAndQuantity']);
+				echo "<br>";
 				if($_SERVER['REQUEST_METHOD']=='POST')
 				{
-					if(isset($_POST['selected']) && isset($_POST['quantity']))
-					{	
-						print_r($_SESSION['cartItemsAndQuantity']);
-						
-						if($_POST['action']=="rem")
-						{
-							echo "inside removing block";
-							/*
-							echo "rm".$_POST['remID'];
-							unset($_SESSION['cartItemsAndQuantity'][$_POST['remID']]);
-							if(!isset($_SESSION['cartItemsAndQuantity'][$_POST['remID']]))
-							{
-								echo "Removed";
-							}
-							else{
-								echo "Not Removed";}
-								*/
-						}
-						print_r($_SESSION['cartItemsAndQuantity']);
-						if($_POST['action']=="add")
-						{
+					if($_POST['action']=="add")
+					{
+						if(isset($_POST['selected']) && isset($_POST['quantity']))
+						{	
 							foreach($_POST['selected'] as $itemsSelected)
 							{
 								if(!isset(($_SESSION['cartItemsAndQuantity'][$itemsSelected])))
@@ -118,41 +103,57 @@
 								}
 							}
 						}
-						$total = 0;
-						echo "<table><tr><th>ID</th><th>Name</th><th>Quantity</th><th>Unit Price</th><th>Total Price</th><tr>";
-						$pageurl = htmlspecialchars($_SERVER["PHP_SELF"]);
-						foreach($_SESSION['cartItemsAndQuantity'] as $IDS=>$Quant)
-						{
-							$result = $xmlItemlList->xpath("/ItemList/Item[@ID='".$IDS."']");
-							$itemDetails = $result[0];
-							$total += $itemDetails->Price*$Quant;
-							echo "<tr>
-									<td>".$IDS."</td>
-									<td>".$itemDetails->Name."</td>
-									<td>".$Quant."</td>
-									<td>".$itemDetails->Price."</td>
-									<td>".$itemDetails->Price*$Quant."</td>
-									<td>".
-									'<form method="POST" action="'.$pageurl.'">				
-												<input type="hidden" name="action" value="rem">
-												<input type="hidden" name="remID" value="'.$IDS.'">
-												<input type ="submit" value="Remove '.$IDS.'">
-									</form>'."
-									</td>
-									</tr>";
-							//echo "ID:".$itemsSelected." Name: ".$_POST['name'][$itemsSelected]." Selected ".$_POST['quantity'][$itemsSelected]."Times Price: ".$_POST['price'][$itemsSelected]."<br>";	
-						}
-						echo "<tr>
-								<td>Total</td>
-								<td></td>
-								<td></td>
-								<td></td>
-								<td>".$total."</td>
-							</tr>";
-						echo "</table>";
 					}
-					
+					if($_POST['action']=="rem")
+					{
+						//echo "inside removing block";
+						//echo "rm".$_POST['remID'];
+						unset($_SESSION['cartItemsAndQuantity'][$_POST['remID']]);
+						/*if(!isset($_SESSION['cartItemsAndQuantity'][$_POST['remID']]))
+						{
+							echo "Removed";
+						}
+						else{
+							echo "Not Removed";
+						}
+						*/	
+					}	
 				}
+				print_r($_SESSION['cartItemsAndQuantity']);			
+				echo "<br>";
+				$total = 0;
+				echo "<table><tr><th>ID</th><th>Name</th><th>Quantity</th><th>Unit Price</th><th>Total Price</th><tr>";
+				$pageurl = htmlspecialchars($_SERVER["PHP_SELF"]);
+				foreach($_SESSION['cartItemsAndQuantity'] as $IDS=>$Quant)
+				{
+					$result = $xmlItemlList->xpath("/ItemList/Item[@ID='".$IDS."']");
+					$itemDetails = $result[0];
+					$total += $itemDetails->Price*$Quant;
+					echo "<tr>
+							<td>".$IDS."</td>
+							<td>".$itemDetails->Name."</td>
+							<td>".$Quant."</td>
+							<td>".$itemDetails->Price."</td>
+							<td>".$itemDetails->Price*$Quant."</td>
+							<td>".
+							'<form method="POST" action="'.$pageurl.'">				
+										<input type="hidden" name="action" value="rem">
+										<input type="hidden" name="remID" value="'.$IDS.'">
+										<input type ="submit" value="Remove '.$IDS.'">
+							</form>'."
+							</td>
+							</tr>";
+					//echo "ID:".$itemsSelected." Name: ".$_POST['name'][$itemsSelected]." Selected ".$_POST['quantity'][$itemsSelected]."Times Price: ".$_POST['price'][$itemsSelected]."<br>";	
+				}
+				echo "<tr>
+						<td>Total</td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td>".$total."</td>
+					</tr>";
+				echo "</table>";
+					
 			?>
 		</div>
 	</div>
