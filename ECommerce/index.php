@@ -17,8 +17,8 @@
     <style>
         .inputBox{
             width : 30%;
-            /*margin: 0% 40% 0% 40%;*//*this one also works*/
-            margin: 15% auto;
+            margin: 10% 40% 0% 40%;*//*this one also works*/
+            /*margin: 15% auto 0% auto;*/
             /*border: 1px solid red;*/
         }
         .inputBox form table tr td{
@@ -34,7 +34,7 @@
 </head>
 <body>
     <?php
-        echo "Current Directory:". $_SERVER["PHP_SELF"]."<br>"; 
+        //echo "Current Directory:". $_SERVER["PHP_SELF"]."<br>"; 
         
         $pass = "";//initializing vars
         $nameErr = $passErr = "";
