@@ -17,18 +17,24 @@
     <style>
         .inputBox{
             width : 30%;
-            margin: 10% 40% 0% 40%;*//*this one also works*/
+            margin: 10% 45% 0% 35%;/*this one also works*/
             /*margin: 15% auto 0% auto;*/
             /*border: 1px solid red;*/
         }
         .inputBox form table tr td{
             border: 1px solid yellow;
         }
+        .inputBox table{
+            width:100%;
+        }
         #submit{
             width:100%;
         }
         .error{
             text-align: right;
+        }
+        .welcome{
+            text-align:center;
         }
     </style>
 </head>
@@ -76,7 +82,7 @@
             $pass = trim($_POST['pass']);
             $passFromFile = retrieveNamePass($name);
             $pass = "pass:".$pass;
-            echo $pass." ".$passFromFile;
+            //echo $pass." ".$passFromFile;
             if($passFromFile != null)
             {
                 if($passFromFile == $pass)
@@ -94,6 +100,10 @@
 //--------------------------------------}------------------------------------------------//
     ?>
     <div class="inputBox">
+        <div class="welcome">
+            <h1>Welcome to Online Mobile Bazar</h1><br>
+            <h3>Please Log in to continue</h3><br>
+        </div>
         <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
             <table>
                 <tr><td>Username:</td><td> <input type="text"     name="name" value="<?php echo $name;?>" required></td></tr>
@@ -101,7 +111,7 @@
                 <tr><td>Password:</td><td> <input type="password" name="pass" required></td></tr>
                 <tr><td colspan=2><div class="error"> <?php echo $passErr;?></div></td></tr>
                 <tr><td colspan=2><input id = "submit" type="submit"value="Log In">       </td></tr>
-                <tr><td colspan=2><a href="Reg.php">Create An Account</a></td></tr>
+                <tr><td colspan=2 style="text-align:center"><a href="Reg.php">Create An Account</a></td></tr>
             </table>
         </form>
     </div>

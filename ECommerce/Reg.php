@@ -15,6 +15,9 @@
             .error{
                 text-align: right;
             }
+            .Welcome{
+                text-align:center;
+            }
         </style>
     </head>
     <body>
@@ -89,7 +92,7 @@
 				}
             }
 //--------------------------------------void main(){-------------------------------------//
-            echo "Current Directory:". $_SERVER["PHP_SELF"]."<br>"; 
+            //echo "Current Directory:". $_SERVER["PHP_SELF"]."<br>"; 
             $name = $email = $pass = $confPass = $str= "";//initializing vars
             $nameErr = $emailErr = $passErr = $confPassErr = "";
             
