@@ -50,6 +50,10 @@
 		table tr td{
 			border: 1px solid black;
 		}
+		.popConf{
+			border: 2px solid green;
+			background-color:lightgreen;
+		}
 	</style>
     
 </head>
@@ -83,8 +87,8 @@
 		
 		<div class="CartContainer">
 			<?php
-				print_r($_SESSION['cartItemsAndQuantity']);
-				echo "<br>";
+				//print_r($_SESSION['cartItemsAndQuantity']);
+				//echo "<br>";
 				if($_SERVER['REQUEST_METHOD']=='POST')
 				{
 					if($_POST['action']=="add")
@@ -117,43 +121,72 @@
 							echo "Not Removed";
 						}
 						*/	
-					}	
+					}
+					if($_POST['action']=="buy")
+					{
+						if(isset($_SESSION['cartItemsAndQuantity']))
+						{
+							$cost=$_POST['TotalCost'];
+							if($cost>0)
+							{
+								unset($_SESSION['cartItemsAndQuantity']);
+								echo '
+									<div class="popConf">
+										<h3>Total Cost: '.$cost.'</h3><br>
+										<h4>Your items will be delivered within 24 hours</h4><br>
+										<h1>Thanks for shopping with us</h1>
+									</div>
+								';
+							}
+						}
+					}
 				}
-				print_r($_SESSION['cartItemsAndQuantity']);			
-				echo "<br>";
+				//print_r($_SESSION['cartItemsAndQuantity']);			
+				//echo "<br>";
+				//This part shows the current items in cart
 				$total = 0;
-				echo "<table><tr><th>ID</th><th>Name</th><th>Quantity</th><th>Unit Price</th><th>Total Price</th><tr>";
 				$pageurl = htmlspecialchars($_SERVER["PHP_SELF"]);
-				foreach($_SESSION['cartItemsAndQuantity'] as $IDS=>$Quant)
+				if(isset($_SESSION['cartItemsAndQuantity'] ))
 				{
-					$result = $xmlItemlList->xpath("/ItemList/Item[@ID='".$IDS."']");
-					$itemDetails = $result[0];
-					$total += $itemDetails->Price*$Quant;
+					echo "<table><tr><th>ID</th><th>Name</th><th>Quantity</th><th>Unit Price</th><th>Total Price</th><tr>";
+					foreach($_SESSION['cartItemsAndQuantity'] as $IDS=>$Quant)
+					{
+						$result = $xmlItemlList->xpath("/ItemList/Item[@ID='".$IDS."']");
+						$itemDetails = $result[0];
+						$total += $itemDetails->Price*$Quant;
+						echo "<tr>
+								<td>".$IDS."</td>
+								<td>".$itemDetails->Name."</td>
+								<td>".$Quant."</td>
+								<td>".$itemDetails->Price."</td>
+								<td>".$itemDetails->Price*$Quant."</td>
+								<td>".
+								'<form method="POST" action="'.$pageurl.'">				
+											<input type="hidden" name="action" value="rem">
+											<input type="hidden" name="remID" value="'.$IDS.'">
+											<input type ="submit" value="Remove '.$IDS.'">
+								</form>'."
+								</td>
+								</tr>";
+						//echo "ID:".$itemsSelected." Name: ".$_POST['name'][$itemsSelected]." Selected ".$_POST['quantity'][$itemsSelected]."Times Price: ".$_POST['price'][$itemsSelected]."<br>";	
+					}
 					echo "<tr>
-							<td>".$IDS."</td>
-							<td>".$itemDetails->Name."</td>
-							<td>".$Quant."</td>
-							<td>".$itemDetails->Price."</td>
-							<td>".$itemDetails->Price*$Quant."</td>
-							<td>".
-							'<form method="POST" action="'.$pageurl.'">				
-										<input type="hidden" name="action" value="rem">
-										<input type="hidden" name="remID" value="'.$IDS.'">
-										<input type ="submit" value="Remove '.$IDS.'">
-							</form>'."
-							</td>
-							</tr>";
-					//echo "ID:".$itemsSelected." Name: ".$_POST['name'][$itemsSelected]." Selected ".$_POST['quantity'][$itemsSelected]."Times Price: ".$_POST['price'][$itemsSelected]."<br>";	
+							<td>Total</td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td>".$total."</td>
+						</tr>";
+					echo "</table>";
 				}
-				echo "<tr>
-						<td>Total</td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td>".$total."</td>
-					</tr>";
-				echo "</table>";
 					
+				//Checkout
+				echo '
+				<form method="POST" action="'.$pageurl.'">				
+					<input type="hidden" name="action" value="buy">
+					<input type="hidden" name="TotalCost" value='.$total.'>
+					<input type ="submit" value="Buy">
+				</form>';
 			?>
 		</div>
 	</div>
