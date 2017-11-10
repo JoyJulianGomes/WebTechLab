@@ -47,6 +47,9 @@
 			background: green;
 			box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 		}
+		table tr td{
+			border: 1px solid black;
+		}
 	</style>
     
 </head>
@@ -74,6 +77,7 @@
 					}
 				?>
 			</div>
+			<input type="hidden" name="action" value="add">
 			<input id="AddToCartButton" type ="submit" value="Add to Cart">
 		</form>
 		
@@ -84,20 +88,39 @@
 					if(isset($_POST['selected']) && isset($_POST['quantity']))
 					{	
 						print_r($_SESSION['cartItemsAndQuantity']);
-						foreach($_POST['selected'] as $itemsSelected)
+						
+						if($_POST['action']=="rem")
 						{
-							//select item node from xml
-							if(!isset(($_SESSION['cartItemsAndQuantity'][$itemsSelected])))
+							echo "inside removing block";
+							/*
+							echo "rm".$_POST['remID'];
+							unset($_SESSION['cartItemsAndQuantity'][$_POST['remID']]);
+							if(!isset($_SESSION['cartItemsAndQuantity'][$_POST['remID']]))
 							{
-								$_SESSION['cartItemsAndQuantity'] += [$itemsSelected=>$_POST['quantity'][$itemsSelected]];
+								echo "Removed";
 							}
-							else
+							else{
+								echo "Not Removed";}
+								*/
+						}
+						print_r($_SESSION['cartItemsAndQuantity']);
+						if($_POST['action']=="add")
+						{
+							foreach($_POST['selected'] as $itemsSelected)
 							{
-								$_SESSION['cartItemsAndQuantity'][$itemsSelected] += $_POST['quantity'][$itemsSelected];
+								if(!isset(($_SESSION['cartItemsAndQuantity'][$itemsSelected])))
+								{
+									$_SESSION['cartItemsAndQuantity'] += [$itemsSelected=>$_POST['quantity'][$itemsSelected]];
+								}
+								else
+								{
+									$_SESSION['cartItemsAndQuantity'][$itemsSelected] += $_POST['quantity'][$itemsSelected];
+								}
 							}
 						}
 						$total = 0;
 						echo "<table><tr><th>ID</th><th>Name</th><th>Quantity</th><th>Unit Price</th><th>Total Price</th><tr>";
+						$pageurl = htmlspecialchars($_SERVER["PHP_SELF"]);
 						foreach($_SESSION['cartItemsAndQuantity'] as $IDS=>$Quant)
 						{
 							$result = $xmlItemlList->xpath("/ItemList/Item[@ID='".$IDS."']");
@@ -109,7 +132,14 @@
 									<td>".$Quant."</td>
 									<td>".$itemDetails->Price."</td>
 									<td>".$itemDetails->Price*$Quant."</td>
-								  </tr>";
+									<td>".
+									'<form method="POST" action="'.$pageurl.'">				
+												<input type="hidden" name="action" value="rem">
+												<input type="hidden" name="remID" value="'.$IDS.'">
+												<input type ="submit" value="Remove '.$IDS.'">
+									</form>'."
+									</td>
+									</tr>";
 							//echo "ID:".$itemsSelected." Name: ".$_POST['name'][$itemsSelected]." Selected ".$_POST['quantity'][$itemsSelected]."Times Price: ".$_POST['price'][$itemsSelected]."<br>";	
 						}
 						echo "<tr>
