@@ -4,5 +4,5 @@ unset($_SESSION['cartItemsAndQuantity']);
 session_destroy();
 $_SESSION = NULL;
 //setcookie('username', 'logout', time()+86400);//this line is only for testing do not uncomment
-header("location:index.html");
+header("location:index.php");
 ?>

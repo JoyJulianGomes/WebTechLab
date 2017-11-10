@@ -101,7 +101,7 @@
                 <tr><td>Password:</td><td> <input type="password" name="pass" required></td></tr>
                 <tr><td colspan=2><div class="error"> <?php echo $passErr;?></div></td></tr>
                 <tr><td colspan=2><input id = "submit" type="submit"value="Log In">       </td></tr>
-                <tr><td colspan=2>Create An <a href="Reg.php">Account</a></td></tr>
+                <tr><td colspan=2><a href="Reg.php">Create An Account</a></td></tr>
             </table>
         </form>
     </div>
