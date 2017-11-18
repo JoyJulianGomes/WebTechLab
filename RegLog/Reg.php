@@ -32,7 +32,8 @@
 			
             function checkPassAndConfpassMatch($pass, $confPass)
             {return ($pass==$confPass)?true:false;}
-			
+            
+            /*
             function checkIfNameAlreadyExists($name)
             {
                 $name="name:".$name;
@@ -59,14 +60,42 @@
                 }
                 fclose($file);
                 return $match;
-			}
+            }
+            */
+            function checkIfNameAlreadyExists($name)
+            {
+                //Creating Database connection
+                $con = new mysqli("localhost", "root", "", "test");
+                if ($con->connect_error) 
+                {
+                    die("Connection failed: " . $con->connect_error);
+                }
+    
+                //Preparing and binding qurery
+                $stmt = $con->prepare("SELECT USERNAME from CREDENTIALS where USERNAME = ?");
+                $stmt->bind_param("s", $name);
+                //Executing Query
+                $stmt->execute();
+                //Loading Results
+                $result = $stmt->get_result();
+    
+                if($result->num_rows > 0){ //name exists
+                    $con->close();
+                    return true;
+                }
+                else{ //name does not exists
+                    $con->close();
+                    return false;
+                }
+            }
 			
-            function writeCredential($str, $name, $pass, $confPass)
+            function writeCredential($str, $name, $email, $pass, $confPass)
             {
                 GLOBAL $nameErr, $passErr, $confPassErr;
 				if(checkPassAndConfpassMatch($pass, $confPass)){
 				    if(!checkIfNameAlreadyExists($name))
 					{
+                        /*
                         $file = fopen("myFile.txt", 'a') or die("File opening error");
 						if(fwrite($file, $str))
 						{
@@ -80,6 +109,19 @@
                             fclose($file);
                             return false;
                         }
+                        */
+                        //Creating Database connection
+                        $con = new mysqli("localhost", "root", "", "test");
+                        if ($con->connect_error) 
+                        {
+                            die("Connection failed: " . $con->connect_error);
+                        }
+
+                        //Preparing and binding qurery
+                        $stmt = $con->prepare( "INSERT INTO `CREDENTIALS` (`USERNAME`, `EMAIL`, `PASSWORD`) VALUES (?, ?, ?);");
+                        $stmt->bind_param("sss", $name, $email, $pass);
+                        //Executing Query
+                        return $stmt->execute();
 					}
 					else{
                         $nameErr = "Name already in use";
@@ -103,14 +145,9 @@
                 $pass = trim($_POST['pass']);
                 $confPass = trim($_POST['confPass']);
                 $str = "name:".$name.",email:".$email.",pass:".$pass.";\n";
-                if(writeCredential($str, $name, $pass, $confPass))
+                if(writeCredential($str, $name, $email, $pass, $confPass))
                 {
                     header("Location: login.php");
-                }
-                else
-                {
-                    echo "rotten code";
-                    exit;
                 }
             }
 //--------------------------------------}------------------------------------------------//
