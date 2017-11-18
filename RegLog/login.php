@@ -52,6 +52,7 @@
             $data = htmlspecialchars($data);
             return $data;
         }
+        /*
         function retrieveNamePass($name)
         {
             $name="name:".$name;
@@ -74,14 +75,54 @@
             fclose($file);
             return null;
         }
-        
+        */
+        function retrieveNamePassFromDB($name)
+        {
+            //Creating Database connection
+            $con = new mysqli("localhost", "root", "", "test");
+            if ($con->connect_error) 
+            {
+                die("Connection failed: " . $con->connect_error);
+            }
+
+            //Preparing and binding qurery
+            $stmt = $con->prepare("SELECT PASSWORD from CREDENTIALS where USERNAME = ?");
+            $stmt->bind_param("s", $name);
+            //Executing Query
+            $stmt->execute();
+            //Loading Results
+            $result = $stmt->get_result();
+
+            if($result->num_rows > 0){ //name exists
+                $row = $result->fetch_assoc();
+                $pass = $row["PASSWORD"];
+                //begin debug purpose
+                //$file = fopen("debug.txt", 'a') or die("File opening error");
+                //fwrite($file, $name.$pass."\n");
+                //end debug purpose
+                $con->close();
+                return $pass;
+            }
+            else{ //name does not exists
+                $con->close();
+                return null;
+            }
+        }
+
 //--------------------------------------void main(){-------------------------------------//
         if($_SERVER['REQUEST_METHOD']=='POST')
-        {
+        {          
+            //filtering input
             $name = "".inputFiltering($_POST['name']);
             $pass = trim($_POST['pass']);
-            $passFromFile = retrieveNamePass($name);
-            $pass = "pass:".$pass;
+            
+            //Retrieving Credential From File
+            //$passFromFile = retrieveNamePass($name);
+            //$pass = "pass:".$pass;
+
+            //Retrieving Credentials From Database
+            $passFromFile = retrieveNamePassFromDB($name);
+
             //echo $pass." ".$passFromFile;
             if($passFromFile != null)
             {
