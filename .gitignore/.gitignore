@@ -1,6 +1,8 @@
 #VS Code
 #workspace file
 *.code-workspace
+#launch file
+launch.json
 
 #Windows file system
 # Windows thumbnail cache files
