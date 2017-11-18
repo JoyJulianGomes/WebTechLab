@@ -1,6 +1,3 @@
-<?php
-    session_start();
-?>
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -17,6 +14,9 @@
             }
             .error{
                 text-align: right;
+            }
+            .Welcome{
+                text-align:center;
             }
         </style>
     </head>
@@ -72,8 +72,6 @@
 						{
                             //echo "writting successfull<br>";
                             fclose($file);
-                            $_SESSION["Username"] = $name;
-                            header("Location: login.php");
                             return true;
                         }
                         else
@@ -94,7 +92,7 @@
 				}
             }
 //--------------------------------------void main(){-------------------------------------//
-            echo "Current Directory:". $_SERVER["PHP_SELF"]."<br>"; 
+            //echo "Current Directory:". $_SERVER["PHP_SELF"]."<br>"; 
             $name = $email = $pass = $confPass = $str= "";//initializing vars
             $nameErr = $emailErr = $passErr = $confPassErr = "";
             
@@ -105,7 +103,15 @@
                 $pass = trim($_POST['pass']);
                 $confPass = trim($_POST['confPass']);
                 $str = "name:".$name.",email:".$email.",pass:".$pass.";\n";
-                writeCredential($str, $name, $pass, $confPass);
+                if(writeCredential($str, $name, $pass, $confPass))
+                {
+                    header("Location: login.php");
+                }
+                else
+                {
+                    echo "rotten code";
+                    exit;
+                }
             }
 //--------------------------------------}------------------------------------------------//
         ?>

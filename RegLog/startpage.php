@@ -9,10 +9,9 @@
 <body>
 
 	<?php 
-		echo "Hello ".$_SESSION['Username'];
-		session_destroy();
+		echo "Hello ".$_SESSION['username'];
 	?>
-	<a href="index.php">index</a>
+	<a href="logout.php">logout</a>
 </body>
 
 </html>

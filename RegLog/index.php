@@ -27,8 +27,8 @@
     <body>
         <div class="LogReg">
             Welcome to Hotel Picker
-            <a href="Login.php">Login</a>
-            <a href="Reg.php">Sign up</a>
+            <a href="login.php">Login</a>
+            <a href="reg.php">Sign up</a>
         </div>
     </body>
 </html>

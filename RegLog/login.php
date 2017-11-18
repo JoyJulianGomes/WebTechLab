@@ -1,11 +1,13 @@
 <?php 
+    //IMPORTANT CONVENTION: ALL $_SESSION AND $_COOKIE VARIABLES ARE LOWER CASE; NO UPPER CASE ALLOWED
     session_start();
-    if(isset($_SESSION['Username'])){
-
+    if(isset($_COOKIE['username'])){
+        $name = $_SESSION['username'] = $_COOKIE['username'];
     }
     else{
-        $_SESSION['Username'] = "notset";
+        $name = $_SESSION['username'] = "";//"not set";
     }
+    //echo "<h1>Username: ".$name."</h1><br>";
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -15,12 +17,15 @@
     <style>
         .inputBox{
             width : 30%;
-            /*margin: 0% 40% 0% 40%;*//*this one also works*/
-            margin: 15% auto;
+            margin: 10% 45% 0% 35%;/*this one also works*/
+            /*margin: 15% auto 0% auto;*/
             /*border: 1px solid red;*/
         }
         .inputBox form table tr td{
             border: 1px solid yellow;
+        }
+        .inputBox table{
+            width:100%;
         }
         #submit{
             width:100%;
@@ -28,17 +33,18 @@
         .error{
             text-align: right;
         }
+        .welcome{
+            text-align:center;
+        }
     </style>
 </head>
 <body>
     <?php
-        echo "Current Directory:". $_SERVER["PHP_SELF"]."<br>"; 
+        //echo "Current Directory:". $_SERVER["PHP_SELF"]."<br>"; 
         
-        $name = isset($_COOKIE['user'])?$_COOKIE['user']:"";
         $pass = "";//initializing vars
         $nameErr = $passErr = "";
-        $fillFlag = false;
-
+        
         function inputFiltering($data)
         {
             $data = trim($data);
@@ -72,51 +78,49 @@
 //--------------------------------------void main(){-------------------------------------//
         if($_SERVER['REQUEST_METHOD']=='POST')
         {
-            if(empty($_POST['name']))
+            $name = "".inputFiltering($_POST['name']);
+            $pass = trim($_POST['pass']);
+            $passFromFile = retrieveNamePass($name);
+            $pass = "pass:".$pass;
+            //echo $pass." ".$passFromFile;
+            if($passFromFile != null)
             {
-                $nameErr = "Field Required!!";
-                $fillFlag = true;
-            }
-            else{$name = "".inputFiltering($_POST['name']);}
-            
-            if(empty($_POST['pass']))
-            {
-                $passErr = " Field Required!!";
-                $fillFlag = true;
-            }
-            else{$pass = inputFiltering($_POST['pass']);}
-            
-            //if all fields are filled then check proccess start
-            if($fillFlag== false)
-            {                
-                $passFromFile = retrieveNamePass($name);
-                $pass = "pass:".$pass;
-                if($passFromFile != null)
+                if($passFromFile == $pass)
                 {
-                    if($passFromFile == $pass){
-						echo "success";
-                        $_SESSION['Username']=$name;
-                        setcookie("user", $name, time()+3600);
-						header("Location:startpage.php");
-						exit;
-					}
-                    else{$passErr = "Wrong Password";}
+                    echo "success";
+                    $_SESSION['username']=$name;
+                    setcookie("username", $name, time()+86400);//1day=86400 10mins=600
+                    header("Location:startpage.php");
+                    exit;
                 }
-                else{$nameErr = "username not found";}
+                else{$passErr = "Wrong Password";}
             }
+            else{$nameErr = "username not found";}
         }
 //--------------------------------------}------------------------------------------------//
     ?>
     <div class="inputBox">
+        <div class="welcome">
+            <h1>Welcome to Online Mobile Bazar</h1><br>
+            <h3>Please Log in to continue</h3><br>
+        </div>
         <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
             <table>
-                <tr><td>Username:</td><td> <input type="text"     name="name" value=<?php echo $_SESSION["Username"];?>></td></tr>
+                <tr><td>Username:</td><td> <input type="text"     name="name" value="<?php echo $name;?>" required></td></tr>
                 <tr><td colspan=2><div class="error"> <?php echo $nameErr;?></div></td></tr>
-                <tr><td>Password:</td><td> <input type="password" name="pass"></td></tr>
+                <tr><td>Password:</td><td> <input type="password" name="pass" required></td></tr>
                 <tr><td colspan=2><div class="error"> <?php echo $passErr;?></div></td></tr>
                 <tr><td colspan=2><input id = "submit" type="submit"value="Log In">       </td></tr>
+                <tr><td colspan=2 style="text-align:center"><a href="Reg.php">Create An Account</a></td></tr>
             </table>
         </form>
+    </div>
+    <div class="inputBox">
+        <table>
+            <tr><td>Username:</td><td>Password</td></tr>
+            <tr><td>joybangla</td><td>jbd</td></tr>
+            <tr><td>dan</td><td>langdon</td></tr>
+        </table>
     </div>
     
 </body>
