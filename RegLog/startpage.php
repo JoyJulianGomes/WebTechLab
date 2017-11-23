@@ -9,7 +9,7 @@
 <body>
 
 	<?php 
-		echo "Hello ".$_SESSION['username'];
+		echo "Hello ".$_SESSION['fname'];
 	?>
 	<a href="logout.php">logout</a>
 </body>

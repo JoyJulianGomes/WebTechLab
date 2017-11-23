@@ -89,7 +89,7 @@
                 }
             }
 			
-            function writeCredential($str, $name, $email, $pass, $confPass)
+            function writeCredential($uname, $fname, $lname, $email, $pass, $confPass)
             {
                 GLOBAL $nameErr, $passErr, $confPassErr;
 				if(checkPassAndConfpassMatch($pass, $confPass)){
@@ -118,13 +118,13 @@
                         }
 
                         //Preparing and binding qurery
-                        $stmt = $con->prepare( "INSERT INTO `CREDENTIALS` (`USERNAME`, `EMAIL`, `PASSWORD`) VALUES (?, ?, ?);");
-                        $stmt->bind_param("sss", $name, $email, $pass);
+                        $stmt = $con->prepare( "INSERT INTO `CREDENTIALS` (`USERNAME`, `FIRSTNAME`, `LASTNAME`, `EMAIL`, `PASSWORD`) VALUES (?, ?, ?, ?, ?);");
+                        $stmt->bind_param("sssss", $uname, $fname, $lname, $email, $pass);
                         //Executing Query
                         return $stmt->execute();
 					}
 					else{
-                        $nameErr = "Name already in use";
+                        $nameErr = "Username already in use";
                         return false;
 					}
 				}
@@ -135,17 +135,18 @@
             }
 //--------------------------------------void main(){-------------------------------------//
             //echo "Current Directory:". $_SERVER["PHP_SELF"]."<br>"; 
-            $name = $email = $pass = $confPass = $str= "";//initializing vars
-            $nameErr = $emailErr = $passErr = $confPassErr = "";
+            $uname = $fname = $lname = $email = $pass = $confPass = $str= "";//initializing vars
+            $nameErr = $fnameErr = $lnameErr = $emailErr = $passErr = $confPassErr = "";
             
             if($_SERVER['REQUEST_METHOD']=='POST')
             {
-                $name = inputFiltering($_POST['name']);
+                $uname = inputFiltering($_POST['uname']);
+                $fname = inputFiltering($_POST['fname']);
+                $lname = inputFiltering($_POST['lname']);
                 $email = inputFiltering($_POST['email']);
                 $pass = trim($_POST['pass']);
                 $confPass = trim($_POST['confPass']);
-                $str = "name:".$name.",email:".$email.",pass:".$pass.";\n";
-                if(writeCredential($str, $name, $email, $pass, $confPass))
+                if(writeCredential($uname, $fname, $lname, $email, $pass, $confPass))
                 {
                     header("Location: login.php");
                 }
@@ -155,14 +156,24 @@
         <div class="inputBox">
             <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
                 <table>
-                    <tr><td>Name:            </td><td> <input type="text"     name="name" required> </td></tr>
+                    <tr><td>User Name:            </td><td> <input type="text"     name="uname" required> </td></tr>
                     <tr><td colspan=2><div class="error"> <?php echo $nameErr;?></div></td></tr>
+                    
+                    <tr><td>First Name:            </td><td> <input type="text"     name="fname" required> </td></tr>
+                    <tr><td colspan=2><div class="error"> <?php echo $fnameErr;?></div></td></tr>
+                    
+                    <tr><td>Last Name:            </td><td> <input type="text"     name="lname" required> </td></tr>
+                    <tr><td colspan=2><div class="error"> <?php echo $lnameErr;?></div></td></tr>
+                    
                     <tr><td>Email:           </td><td> <input type="text"     name="email" required></td></tr>
                     <tr><td colspan=2><div class="error"> <?php echo $emailErr;?></div></td></tr>
+                    
                     <tr><td>Password:        </td><td> <input type="password" name="pass" required> </td></tr>
                     <tr><td colspan=2><div class="error"> <?php echo $passErr;?></div></td></tr>
+                    
                     <tr><td>Confirm Password:</td><td> <input type="password" name="confPass" required></td></tr>
                     <tr><td colspan=2><div class="error"> <?php echo $confPassErr;?></div></td></tr>
+                    
                     <tr><td colspan=2><input id = "submit" type="submit"value="Sign up"></td></tr>
                 </table>
             </form>
