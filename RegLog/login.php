@@ -37,6 +37,11 @@
             text-align:center;
         }
     </style>
+    <script>
+            function giveAlert(){
+                alert("You are Registered");
+            }
+    </script>
 </head>
 <body>
     <?php
@@ -76,7 +81,7 @@
             return null;
         }
         */
-        function retrieveNamePassFromDB($uname)
+        function retrieveNamePassFromDB($UnameCheck)
         {
             //Creating Database connection
             $con = new mysqli("localhost", "root", "", "test");
@@ -86,27 +91,26 @@
             }
 
             //Preparing and binding qurery
-            $stmt = $con->prepare("SELECT PASSWORD, FIRSTNAME from CREDENTIALS where USERNAME = ?");
-            $stmt->bind_param("s", $uname);
+            $stmt = $con->prepare("SELECT `password`, `firstname` FROM `credentials` where `username` = ?");
+            $stmt->bind_param("s", $UnameCheck);
             //Executing Query
             $stmt->execute();
             //Loading Results
             $result = $stmt->get_result();
-
             if($result->num_rows > 0){ //name exists
                 $row = $result->fetch_assoc();
-                $pass = $row["PASSWORD"];
-                $fname = $row["FIRSTNAME"];
+                $pass = $row["password"];
+                $fname = $row["firstname"];
                 $credentials = array("pass"=>$pass, "fname" => $fname);
-                //begin debug purpose
-                //$file = fopen("debug.txt", 'a') or die("File opening error");
-                //fwrite($file, $uname." ".$pass."\n");
-                //end debug purpose
-                $con->close();
+                /*
+                begin debug purpose
+                $file = fopen("debug.txt", 'a') or die("File opening error");
+                fwrite($file, $uname." ".$pass."\n");
+                end debug purpose
+                */
                 return $credentials;
             }
             else{ //name does not exists
-                $con->close();
                 return null;
             }
         }
@@ -117,14 +121,14 @@
             //filtering input
             $name = "".inputFiltering($_POST['uname']);
             $pass = trim($_POST['pass']);
-            
+           
             //Retrieving Credential From File
             //$passFromFile = retrieveNamePass($uname);
             //$pass = "pass:".$pass;
 
             //Retrieving Credentials From Database
-            $passFromFile = retrieveNamePassFromDB($uname);
-
+            $passFromFile = retrieveNamePassFromDB($name);
+            if($passFromFile == null)echo "PassFromDB NOt available";
             //echo $pass." ".$passFromFile;
             if($passFromFile != null)
             {
@@ -134,6 +138,7 @@
                     $_SESSION['username']=$name;
                     $_SESSION['fname'] = $passFromFile["fname"];
                     setcookie("username", $name, time()+86400);//1day=86400 10mins=600
+                    echo "<script>giveAlert()</script>";
                     header("Location:startpage.php");
                     exit;
                 }

@@ -19,6 +19,11 @@
                 text-align:center;
             }
         </style>
+        <script>
+            function giveAlert(){
+                alert("You are Registered");
+            }
+        </script>
     </head>
     <body>
         <?php
@@ -66,6 +71,7 @@
             {
                 //Creating Database connection
                 $con = new mysqli("localhost", "root", "", "test");
+                $r=0;
                 if ($con->connect_error) 
                 {
                     die("Connection failed: " . $con->connect_error);
@@ -80,20 +86,19 @@
                 $result = $stmt->get_result();
     
                 if($result->num_rows > 0){ //name exists
-                    $con->close();
-                    return true;
+                    $r=1;
                 }
                 else{ //name does not exists
-                    $con->close();
-                    return false;
+                    $r = 0;
                 }
+                return $r;
             }
 			
             function writeCredential($uname, $fname, $lname, $email, $pass, $confPass)
             {
                 GLOBAL $nameErr, $passErr, $confPassErr;
 				if(checkPassAndConfpassMatch($pass, $confPass)){
-				    if(!checkIfNameAlreadyExists($name))
+				    if(!checkIfNameAlreadyExists($uname))
 					{
                         /*
                         $file = fopen("myFile.txt", 'a') or die("File opening error");
@@ -121,7 +126,10 @@
                         $stmt = $con->prepare( "INSERT INTO `CREDENTIALS` (`USERNAME`, `FIRSTNAME`, `LASTNAME`, `EMAIL`, `PASSWORD`) VALUES (?, ?, ?, ?, ?);");
                         $stmt->bind_param("sssss", $uname, $fname, $lname, $email, $pass);
                         //Executing Query
-                        return $stmt->execute();
+                        if($stmt->execute()){
+                            echo "<script>giveAlert()</script>";
+                            //return true;
+                        }
 					}
 					else{
                         $nameErr = "Username already in use";

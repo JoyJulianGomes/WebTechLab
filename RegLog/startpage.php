@@ -11,6 +11,7 @@
 	<?php 
 		echo "Hello ".$_SESSION['fname'];
 	?>
+	<a href="update.php">update profile</a>
 	<a href="logout.php">logout</a>
 </body>
 
